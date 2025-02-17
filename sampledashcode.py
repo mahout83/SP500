@@ -2,6 +2,8 @@ import os
 import dash
 import plotly.graph_objects as go
 import yfinance as yf
+import dash_core_components as dcc
+import dash_html_components as html
 
 # Fetch S&P 500 data from Yahoo Finance
 data = yf.download('^GSPC', start="1928-01-01", end="2025-01-01", auto_adjust=True)
@@ -22,7 +24,13 @@ figure.add_trace(go.Scatter(
 # Create Dash app
 app = dash.Dash(__name__)
 
-app.layout = go.Figure(figure)
+# Set the layout to include a Graph component with the figure
+app.layout = html.Div([
+    dcc.Graph(
+        id='sp500-graph',
+        figure=figure
+    )
+])
 
 # Get the port from the environment variable
 port = int(os.environ.get('PORT', 8050))
