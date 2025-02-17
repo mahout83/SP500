@@ -1,7 +1,7 @@
 import os
 import plotly.graph_objects as go
 import yfinance as yf
-from dash import Dash
+from dash import Dash, dcc, html
 
 # Create the Dash app
 app = Dash(__name__)
@@ -30,8 +30,10 @@ figure.update_layout(
     yaxis_title="S&P 500 Index",
 )
 
-# Add graph to the layout of Dash app
-app.layout = go.Figure(figure)
+# Define the layout of the Dash app
+app.layout = html.Div([
+    dcc.Graph(figure=figure)
+])
 
 # Run the app on the Render-provided port
 if __name__ == '__main__':
