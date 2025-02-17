@@ -5,8 +5,8 @@ import yfinance as yf
 data = yf.download('^GSPC', start="1928-01-01", end="2025-01-01", auto_adjust=True)
 
 # Convert Date and Close to lists
-dates = data.index.tolist()  # List of dates
-sp500_values = data['Close'].tolist()  # List of closing values
+dates = data.index.to_pydatetime().tolist()  # Convert index to a list of datetime objects
+sp500_values = data['Close'].values.tolist()  # Convert the 'Close' column to a list
 
 # Create a line chart using plotly
 figure = go.Figure()
