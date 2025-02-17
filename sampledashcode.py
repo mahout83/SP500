@@ -1,16 +1,13 @@
 import yfinance as yf
 import plotly.express as px
 
-# Fetching data for S&P 500
-data = yf.download("^GSPC", start="2000-01-01", end="2025-01-01")
+# Download data
+data = yf.download('^GSPC', start='2020-01-01', end='2023-01-01')
 
-# Resetting the multi-index and flattening it
-data.reset_index(inplace=True)
+# Reset the index to make 'Date' a column
+data = data.reset_index()
 
-# Check the column names to ensure they are correct
-print(data.columns)
-
-# Plotting the data
+# Create the plot
 figure = px.line(data, x='Date', y='Close', title='S&P 500 Index Over Time')
 
 # Show the figure
