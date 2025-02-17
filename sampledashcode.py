@@ -37,8 +37,7 @@ app.layout = html.Div([
     dcc.Graph(figure=figure)
 ])
 
-# Run the app on all available IPs and use the correct port
+# Ensure to fetch the correct port from Render's environment variable
 if __name__ == '__main__':
-    # Fetch the port from the environment, defaulting to 10000
-    port = int(os.environ.get("PORT", 10000))
-    app.run_server(debug=True, host='0.0.0.0', port=port)  # Run with the environment port
+    port = int(os.environ.get('PORT', 10000))  # Default to 10000 if not set
+    app.run_server(debug=True, host='0.0.0.0', port=port)  # Bind to the correct port
