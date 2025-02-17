@@ -1,10 +1,10 @@
-import os
+import dash
 import plotly.graph_objects as go
 import yfinance as yf
-from dash import Dash, dcc, html
+import os
 
-# Create the Dash app
-app = Dash(__name__)
+# Initialize the Dash app
+app = dash.Dash(__name__)
 
 # Fetch S&P 500 data from Yahoo Finance
 data = yf.download('^GSPC', start="1928-01-01", end="2025-01-01", auto_adjust=True)
@@ -30,11 +30,11 @@ figure.update_layout(
     yaxis_title="S&P 500 Index",
 )
 
-# Define the layout of the Dash app
-app.layout = html.Div([
-    dcc.Graph(figure=figure)
-])
+# Set the app layout
+app.layout = go.Figure(figure)
 
-# Run the app on the Render-provided port
-if __name__ == '__main__':
-    app.run_server(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8050)))
+# Get port from environment variable (default to 8050)
+port = os.getenv('PORT', 8050)
+
+# Run the Dash app
+app.run_server(host='0.0.0.0', port=int(port))
