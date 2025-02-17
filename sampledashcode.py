@@ -1,7 +1,7 @@
 import dash
 import plotly.graph_objects as go
 import yfinance as yf
-import os
+from dash import dcc, html
 
 # Initialize the Dash app
 app = dash.Dash(__name__)
@@ -13,7 +13,7 @@ data = yf.download('^GSPC', start="1928-01-01", end="2025-01-01", auto_adjust=Tr
 dates = data.index.to_pydatetime().tolist()  # Convert index to a list of datetime objects
 sp500_values = data['Close'].values.tolist()  # Convert the 'Close' column to a list
 
-# Create a line chart using plotly
+# Create a Plotly line chart
 figure = go.Figure()
 
 figure.add_trace(go.Scatter(
@@ -23,18 +23,21 @@ figure.add_trace(go.Scatter(
     name='S&P 500 Index'
 ))
 
-# Add title and labels
+# Update layout for the figure
 figure.update_layout(
     title="S&P 500 Index Over Time",
     xaxis_title="Date",
     yaxis_title="S&P 500 Index",
 )
 
-# Set the app layout
-app.layout = go.Figure(figure)
+# Set the layout using Dash's Graph component
+app.layout = html.Div([
+    dcc.Graph(
+        id='sp500-graph',
+        figure=figure
+    )
+])
 
-# Get port from environment variable (default to 8050)
-port = os.getenv('PORT', 8050)
-
-# Run the Dash app
-app.run_server(host='0.0.0.0', port=int(port))
+# Run the Dash app on the specified port
+if __name__ == '__main__':
+    app.run_server(debug=True, port=8050, host='0.0.0.0')
