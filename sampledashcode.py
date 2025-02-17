@@ -2,6 +2,7 @@ import dash
 import plotly.graph_objects as go
 import yfinance as yf
 from dash import dcc, html
+import os
 
 # Initialize the Dash app
 app = dash.Dash(__name__)
@@ -36,7 +37,8 @@ app.layout = html.Div([
     dcc.Graph(figure=figure)
 ])
 
-# Run the app on all available IPs (0.0.0.0) and specify the correct port
+# Run the app on all available IPs and use the correct port
 if __name__ == '__main__':
-    # Check for the port environment variable for Render
-    app.run_server(debug=True, host='0.0.0.0', port=10000)  # Render often uses port 10000 by default
+    # Fetch the port from the environment, defaulting to 10000
+    port = int(os.environ.get("PORT", 10000))
+    app.run_server(debug=True, host='0.0.0.0', port=port)  # Run with the environment port
