@@ -36,6 +36,6 @@ app.layout = html.Div([
     dcc.Graph(figure=figure)
 ])
 
-# Run the app on a specified port (render will handle port binding)
+# Run the app on all available IPs (0.0.0.0) and let Render handle the port binding
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8050)
+    app.run_server(debug=True, host='0.0.0.0', port=8000)
