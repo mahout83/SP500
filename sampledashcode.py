@@ -1,11 +1,8 @@
-import dash
 import plotly.graph_objects as go
 import yfinance as yf
+import dash
 from dash import dcc, html
-import os
-
-# Initialize the Dash app
-app = dash.Dash(__name__)
+from dash.dependencies import Input, Output
 
 # Fetch S&P 500 data from Yahoo Finance
 data = yf.download('^GSPC', start="1928-01-01", end="2025-01-01", auto_adjust=True)
@@ -14,30 +11,31 @@ data = yf.download('^GSPC', start="1928-01-01", end="2025-01-01", auto_adjust=Tr
 dates = data.index.to_pydatetime().tolist()  # Convert index to a list of datetime objects
 sp500_values = data['Close'].values.tolist()  # Convert the 'Close' column to a list
 
-# Create a line chart using plotly
-figure = go.Figure()
+# Initialize Dash app
+app = dash.Dash(__name__)
 
-figure.add_trace(go.Scatter(
-    x=dates, 
-    y=sp500_values, 
-    mode='lines', 
-    name='S&P 500 Index'
-))
-
-# Add title and labels
-figure.update_layout(
-    title="S&P 500 Index Over Time",
-    xaxis_title="Date",
-    yaxis_title="S&P 500 Index",
-)
-
-# Define the layout of the app
+# Create layout
 app.layout = html.Div([
-    html.H1("S&P 500 Index Over Time"),
-    dcc.Graph(figure=figure)
+    dcc.Graph(
+        id='line-chart',
+        figure={
+            'data': [
+                go.Scatter(
+                    x=dates,
+                    y=sp500_values,
+                    mode='lines',
+                    name='S&P 500 Index'
+                )
+            ],
+            'layout': go.Layout(
+                title='S&P 500 Index Over Time',
+                xaxis={'title': 'Date'},
+                yaxis={'title': 'S&P 500 Index'}
+            )
+        }
+    )
 ])
 
-# Ensure to fetch the correct port from Render's environment variable
+# Run the app on port 8050
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 10000))  # Default to 10000 if not set
-    app.run_server(debug=True, host='0.0.0.0', port=port)  # Bind to the correct port
+    app.run_server(debug=True, port=8050, host='0.0.0.0')
